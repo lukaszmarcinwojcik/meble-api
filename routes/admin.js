@@ -1,17 +1,36 @@
-var express = require("express");
-var router = express.Router();
+const express = require("express");
+const Produkt = require("../models/produkt");
+const Rodzaj = require("../models/rodzaj");
+const Kolekcja = require("../models/kolekcja");
+const Material = require("../models/material");
+const Pomieszczenie = require("../models/pomieszczenie");
 
-router.all("*", (req, res, next) => {
-  // przed akzda funkcja w adminie sprawadza czy sesja jest
-  //zeby random nie mogl cos pozmienaic
-  if (!req.session.admin) {
-    return;
-  }
-  next();
-});
+const router = express.Router();
 
-/* GET users listing. */
+// router.all("*", (req, res, next) => {
+//   // przed akzda funkcja w adminie sprawadza czy sesja jest
+//   //zeby random nie mogl cos pozmienaic
+//   if (!req.session.admin) {
+//     res.json({ title: "nie masz dostepu" });
+//   }
+//   next();
+// });
+
+//adminyy
 router.get("/", function (req, res, next) {
+  // const newProdukt = new Produkt({
+  //   nazwa: "Szafka Ravena",
+  //   rodzaj: "szafka",
+  //   kolekcja: "Ravena",
+  //   material: "dąb",
+  //   pomieszczenie: "kuchnia",
+  //   nazwapliku: "szafkaravena.jpg",
+  // });
+
+  // newProdukt.save((err) => {
+  //   console.log(err);
+  // });
+
   res.json({ title: "admin" });
 });
 
