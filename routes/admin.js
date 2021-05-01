@@ -16,24 +16,33 @@ const router = express.Router();
 //   next();
 // });
 
-//adminyy
-router.get("/", function (req, res, next) {
-  // const newProdukt = new Produkt({
-  //   nazwa: "Szafka Ravena",
-  //   rodzaj: "szafka",
-  //   kolekcja: "Ravena",
-  //   material: "dąb",
-  //   pomieszczenie: "kuchnia",
-  //   nazwapliku: "szafkaravena.jpg",
-  // });
-
-  // newProdukt.save((err) => {
-  //   console.log(err);
-  // });
-
-  res.json({ title: "admin" });
+//adminyy /admin /pobieram wszystkie produkty - skonczone
+router.get("/", (req, res) => {
+  //pobieramy wszystkie artykuly i wysylamy w json
+  Produkt.find({}, (err, data) => {
+    res.json({ title: "admin", data });
+  });
 });
 
-module.exports = router;
+//dodawanie nowych mebli - skonczone
+// /admin/add
+router.post("/add", (req, res) => {
+  //przechwycone dane z formularza w req body
+  const body = req.body;
+  const produktData = new Produkt(body);
+  const errors = produktData.validateSync();
 
-// dodawanie usuwanie i edytowanie mebla
+  produktData.save((err) => {
+    console.log(err);
+  });
+  res.json({ title: "dodano nowy produkt" }, body, errors);
+});
+// usuwanie po ID - skonczone
+router.get("/delete/:id", (req, res) => {
+  Produkt.findByIdAndDelete(req.params.id, (err) => {
+    res.json({ title: `usunieto item o id ${req.params.id}` });
+  });
+});
+
+// edytowanie
+module.exports = router;
