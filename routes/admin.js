@@ -6,22 +6,14 @@ const Material = require("../models/material");
 const Pomieszczenie = require("../models/pomieszczenie");
 
 const router = express.Router();
-
-// router.all("*", (req, res, next) => {
-//   // przed akzda funkcja w adminie sprawadza czy sesja jest
-//   //zeby random nie mogl cos pozmienaic
-//   if (!req.session.admin) {
-//     res.json({ title: "nie masz dostepu" });
-//   }
-//   next();
-// });
-
-//adminyy /admin /pobieram wszystkie produkty - skonczone
-router.get("/", (req, res) => {
-  //pobieramy wszystkie artykuly i wysylamy w json
-  Produkt.find({}, (err, data) => {
-    res.json({ title: "admin", data });
-  });
+//sprawdzenie cookie session
+router.all("*", (req, res, next) => {
+  // przed akzda funkcja w adminie sprawadza czy sesja jest
+  //zeby random nie mogl cos pozmienaic
+  if (!req.session.admin) {
+    res.json({ title: "nie masz dostepu" });
+  }
+  next();
 });
 
 //dodawanie nowych mebli - skonczone
@@ -31,7 +23,6 @@ router.post("/add", (req, res) => {
   const body = req.body;
   const produktData = new Produkt(body);
   const errors = produktData.validateSync();
-
   produktData.save((err) => {
     console.log(err);
   });
