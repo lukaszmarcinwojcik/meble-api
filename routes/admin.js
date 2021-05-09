@@ -7,14 +7,14 @@ const Pomieszczenie = require("../models/pomieszczenie");
 
 const router = express.Router();
 //sprawdzenie cookie session
-router.all("*", (req, res, next) => {
-  // przed akzda funkcja w adminie sprawadza czy sesja jest
-  //zeby random nie mogl cos pozmienaic
-  if (!req.session.admin) {
-    res.json({ title: "nie masz dostepu" });
-  }
-  next();
-});
+// router.all("*", (req, res, next) => {
+//   // przed akzda funkcja w adminie sprawadza czy sesja jest
+//   //zeby random nie mogl cos pozmienaic
+//   if (!req.session.admin) {
+//     res.json({ title: "nie masz dostepu" });
+//   }
+//   next();
+// });
 
 //dodawanie nowych mebli - skonczone
 // /admin/add

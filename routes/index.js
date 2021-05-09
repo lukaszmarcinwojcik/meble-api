@@ -4,53 +4,72 @@ const config = require("../config");
 const Material = require("../models/material");
 const Produkt = require("../models/produkt");
 const Rodzaj = require("../models/rodzaj");
-const Kolekcja = require("..model/kolekcja");
+const Kolekcja = require("../models/kolekcja");
+const Pomieszczenie = require("../models/pomieszczenie");
 /* GET home page. */
 router.get("/", (req, res) => {
   res.json({ title: "strona glowna" });
 });
 // LOGOWANIE ADMINISTRATORA
-router.post("login", (req, res) => {
+router.post("/login", (req, res) => {
   const body = req.body;
+  console.log("param wyslany to", req.body);
   if (body.login === config.login && body.password === config.password) {
     req.session.admin = 1;
-    res.json({ title: "Udalo Ci się zalogować" });
+    res.json({
+      loginMessage: "Udalo Ci się zalogować",
+      islogged: true,
+      poziomDostepu: 3,
+    });
   } else {
-    res.json({ title: "Nieprawidlowy login lub haslo" });
+    res.json({
+      loginMessage: "Nieprawidlowy login lub haslo",
+      islogged: false,
+      poziomDostepu: 0,
+    });
   }
+});
+//WYLOGOWANIE
+router.get("/logout", (req, res) => {
+  req.session.admin = null;
+  res.json({
+    loginMessage: "Zostales wylogowany",
+    islogged: false,
+    poziomDostepu: 0,
+  });
 });
 
 //POBIERANIE WSZYSTKICH PRODUKTOW
-router.get("listaProduktow", (req, res) => {
+router.get("/listaProduktow", (req, res) => {
   Produkt.find({}, (err, data) => {
     res.json({ title: "Lista produktow", data });
   });
 });
 
 //POBIERANIE WSZYSTKICH KOLEKCJI
-router.get("listaKolekcji", (req, res) => {
+router.get("/listaKolekcji", (req, res) => {
   Kolekcja.find({}, (err, data) => {
     res.json({ title: "Lista kolekcji", data });
   });
 });
 
 //POBIERANIE WSZYSTKICH MATERIALOW
-router.get("listaMaterialow", (req, res) => {
+router.get("/listaMaterialow", (req, res) => {
   Material.find({}, (err, data) => {
     res.json({ title: "Lista materialow", data });
   });
 });
 
 //POBIERANIE WSZYSTKICH POMIESZCZEN
-router.get("listaPomieszczen", (req, res) => {
+router.get("/listaPomieszczen", (req, res) => {
   Pomieszczenie.find({}, (err, data) => {
     res.json({ title: "Lista pomieszczen", data });
   });
 });
 
 //POBIERANIE WSZYSTKICH RODZAJOW
-router.get("listaRodzajow", (req, res) => {
-  Pomieszczenie.find({}, (err, data) => {
+router.get("/listaRodzajow", (req, res) => {
+  Rodzaj.find({}, (err, data) => {
     res.json({ title: "Lista rodzajow", data });
   });
 });
@@ -62,6 +81,16 @@ router.get("/filtruj", (req, res) => {
   const material = req.query.material;
   const pomieszczenie = req.query.pomieszczenie;
   console.log(rodzaj);
+  console.log(typeof rodzaj);
+
+  if (
+    rodzaj === "" &&
+    kolekcja === "" &&
+    material === "" &&
+    pomieszczenie === ""
+  ) {
+    res.redirect("/listaProduktow");
+  }
 
   let Out = Produkt;
 
