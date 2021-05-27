@@ -6,17 +6,18 @@ const Material = require("../models/material");
 const Pomieszczenie = require("../models/pomieszczenie");
 
 const router = express.Router();
-//sprawdzenie cookie session
-// router.all("*", (req, res, next) => {
-//   // przed akzda funkcja w adminie sprawadza czy sesja jest
-//   //zeby random nie mogl cos pozmienaic
-//   if (!req.session.admin) {
-//     res.json({ title: "nie masz dostepu" });
-//   }
-//   next();
-// });
+// sprawdzenie cookie session
+router.all("*", (req, res, next) => {
+  // przed akzda funkcja w adminie sprawadza czy sesja jest
+  //zeby random nie mogl cos pozmienaic
+  console.log("sesja ciastkowa w router all", req.session.admin);
+  if (!req.session.admin) {
+    res.json({ title: "nie masz dostepu" });
+  }
+  next();
+});
 
-//dodawanie nowych mebli - skonczone
+// dodawanie nowych mebli - skonczone
 // /admin/add
 router.post("/add", (req, res) => {
   //przechwycone dane z formularza w req body

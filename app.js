@@ -16,6 +16,7 @@ db.on("error", console.error.bind(console, "connection error:"));
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
+var newsletterRouter = require("./routes/newsletter");
 var adminRouter = require("./routes/admin");
 
 var app = express();
@@ -40,6 +41,7 @@ app.use(
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
+app.use("/newsletter", newsletterRouter);
 app.use("/admin", adminRouter);
 
 // catch 404 and forward to error handler
