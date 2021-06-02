@@ -60,9 +60,8 @@ router.post("/add", (req, res) => {
             res.json({ message: "Zapisałeś/aś sie do naszego Newslettera!" });
           })
           .catch((err) => console.log(err));
+        console.log("nowy newsletter to: ", newNewsletter);
       }
-      ///
-      console.log("nowy newsletter to: ", newNewsletter);
     });
   }
 });

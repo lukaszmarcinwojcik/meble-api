@@ -6,7 +6,7 @@ const userSchema = new Schema({
   surname: { type: String, require: true },
   email: { type: String, require: true },
   password: { type: String, require: true },
-  accessLevel: { type: Number, default: 0 },
+  accessLevel: { type: Number, default: 1 },
   date: { type: Date, default: Date.now },
 });
 

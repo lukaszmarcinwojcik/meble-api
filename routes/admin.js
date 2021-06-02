@@ -1,9 +1,9 @@
 const express = require("express");
-const Produkt = require("../models/produkt");
-const Rodzaj = require("../models/rodzaj");
-const Kolekcja = require("../models/kolekcja");
+const Product = require("../models/product");
+const Type = require("../models/type");
+const Collection = require("../models/collection");
 const Material = require("../models/material");
-const Pomieszczenie = require("../models/pomieszczenie");
+const Room = require("../models/room");
 
 const router = express.Router();
 // sprawdzenie cookie session

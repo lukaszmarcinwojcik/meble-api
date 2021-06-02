@@ -12,7 +12,7 @@ router.get("/", function (req, res, next) {
   res.json({ title: "uzytkownik" });
 });
 
-//Register
+//=============================Register=====================================================
 router.post("/register", (req, res) => {
   const { name, surname, email, password, password2 } = req.body;
   // tabela bledow
@@ -62,46 +62,74 @@ router.post("/register", (req, res) => {
           email,
           password,
         });
-        // Hashowanie pwd
-        bcrypt.genSalt(10, (err, salt) =>
-          bcrypt.hash(newUser.password, salt, (err, hash) => {
-            if (err) throw err;
-            //set pwd to hashed
-            newUser.password = hash;
-            //Save user
-            newUser
-              .save()
-              .then((user) => {
-                res.json({ message: "Udalo Ci sie zarejestrowac" });
-              })
-              .catch((err) => console.log(err));
+        //Save user
+        newUser
+          .save()
+          .then((user) => {
+            res.json({ message: "Udalo Ci sie zarejestrowac" });
           })
-        );
+          .catch((err) => console.log(err));
         console.log(newUser);
-        res.json({ message: "Udalo sie zarejestrowac" });
       }
     });
   }
 });
 
-//login
+//====================================login===========================================================
 //popracoweac nad tym??????????????????????????? 1:20min
-router.post("/login", (req, res, next) => {
-  passport.authenticate("local", {
-    successRedirect: "/dashboard",
-    failureRedirect: "/users/login",
-    failureFlash: true,
-  })(req, res, next);
+router.post("/login", (req, res) => {
+  const { email, password } = req.body;
+  // tabela bledow
+  let errors = [];
+
+  //check required fields
+  if (!email) {
+    errors.push({ message: "Prosze wpisac email" });
+  }
+  if (!password) {
+    errors.push({ message: "Prosze wpisac haslo" });
+  }
+
+  if (errors.length > 0) {
+    //obsluga bledu
+    res.json({
+      errors,
+      email,
+      password: "",
+    });
+  } else {
+    const user = User.findOne({ email: email, password: password }).then(
+      (user) => {
+        if (!user) {
+          //User nie exist nie
+          errors.push({ message: "bledny login lub haslo" });
+          res.json({
+            errors,
+            email,
+            password: "",
+          });
+        } else {
+          //tu bedzie res json z danymi uzytkownika
+          accessLevel = user.accessLevel;
+          res.json({
+            islogged: true,
+            message: "Udalo CI sie zalogować!",
+            accessLevel,
+          });
+        }
+      }
+    );
+  }
 });
 
-//logout
+//===================================logout===================================================
 router.get("/logout", (req, res) => {
   req.logout();
 
   res.json({
-    loginMessage: "Zostales wylogowany",
+    message: "Zostales wylogowany",
     islogged: false,
-    poziomDostepu: 0,
+    accessLevel: 0,
   });
 });
 
