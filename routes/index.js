@@ -3,9 +3,10 @@ const router = express.Router();
 const config = require("../config");
 const Product = require("../models/product");
 const Type = require("../models/type");
-const Collection = require("../models/collection");
+const FurnitureCollection = require("../models/furnitureCollection");
 const Material = require("../models/material");
 const Room = require("../models/room");
+
 /* GET home page. */
 router.get("/", (req, res) => {
   res.json({ title: "strona glowna" });
@@ -40,49 +41,54 @@ router.get("/logout", (req, res) => {
 });
 
 //POBIERANIE WSZYSTKICH PRODUKTOW
-router.get("/listaProduktow", (req, res) => {
-  Product.find({}, (err, data) => {
-    res.json({ title: "Lista produktow", data });
+router.get("/productList", (req, res) => {
+  Product.find({}, (err, productList) => {
+    res.json(productList);
   });
 });
 
 //POBIERANIE WSZYSTKICH KOLEKCJI
-router.get("/listaKolekcji", (req, res) => {
-  Collection.find({}, (err, data) => {
-    res.json({ title: "Lista kolekcji", data });
+router.get("/collectionList", (req, res) => {
+  FurnitureCollection.find({}, (err, collectionList) => {
+    res.json(collectionList);
   });
 });
 
 //POBIERANIE WSZYSTKICH MATERIALOW
-router.get("/listaMaterialow", (req, res) => {
-  Material.find({}, (err, data) => {
-    res.json({ title: "Lista materialow", data });
+router.get("/materialList", (req, res) => {
+  Material.find({}, (err, materialList) => {
+    res.json(materialList);
   });
 });
 
 //POBIERANIE WSZYSTKICH POMIESZCZEN
-router.get("/listaPomieszczen", (req, res) => {
-  Room.find({}, (err, data) => {
-    res.json({ title: "Lista pomieszczen", data });
+router.get("/roomList", (req, res) => {
+  Room.find({}, (err, roomList) => {
+    res.json(roomList);
   });
 });
 
 //POBIERANIE WSZYSTKICH RODZAJOW
-router.get("/listaRodzajow", (req, res) => {
-  Type.find({}, (err, data) => {
-    res.json({ title: "Lista rodzajow", data });
+router.get("/typeList", (req, res) => {
+  Type.find({}, (err, typeList) => {
+    res.json(typeList);
   });
 });
 
 //FILTROWANIE MEBLI
-router.get("/filtruj", (req, res) => {
+router.get("/filter", (req, res) => {
   const type = req.query.type;
-  const collection = req.query.collection;
+  const furnitureCollection = req.query.collection;
   const material = req.query.material;
   const room = req.query.room;
 
-  if (type === "" && collection === "" && material === "" && room === "") {
-    res.redirect("/listaProduktow");
+  if (
+    type === "" &&
+    furnitureCollection === "" &&
+    material === "" &&
+    room === ""
+  ) {
+    res.redirect("/productList");
   }
 
   let Out = Product;
@@ -92,9 +98,9 @@ router.get("/filtruj", (req, res) => {
       type: type,
     });
   }
-  if (collection) {
+  if (furnitureCollection) {
     Out = Out.find({
-      collection: collection,
+      furnitureCollection: furnitureCollection,
     });
   }
   if (material) {
@@ -108,8 +114,8 @@ router.get("/filtruj", (req, res) => {
     });
   }
   Out.sort({ date: -1 });
-  Out.exec((err, data) => {
-    res.json({ title: "filtrowane dane: ", data });
+  Out.exec((err, productList) => {
+    res.json(productList);
   });
 });
 

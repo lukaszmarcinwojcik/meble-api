@@ -2,7 +2,7 @@ var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
 const roomSchema = new Schema({
-  nazwa: { type: String, required: true },
+  name: { type: String, required: true },
   date: { type: Date, default: Date.now },
 });
 
