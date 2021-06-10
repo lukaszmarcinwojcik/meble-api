@@ -1,5 +1,6 @@
 var express = require("express");
 var router = express.Router();
+var sha512 = require("js-sha512");
 // const bcrypt = require("bcrypt");
 // const passport = require("passport");
 // czeba googlac? bcrypt hasdzowanie hasla

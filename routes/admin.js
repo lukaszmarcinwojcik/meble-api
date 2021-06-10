@@ -17,9 +17,9 @@ const router = express.Router();
 //   next();
 // });
 
-// dodawanie nowych mebli - skonczone
+// ADD PRODUCT
 // /admin/add
-router.post("/add", (req, res) => {
+router.post("/add/product", (req, res) => {
   //przechwycone dane z formularza w req body
   const body = req.body;
   const productData = new Product(body);
@@ -27,16 +27,49 @@ router.post("/add", (req, res) => {
   productData.save((err) => {
     console.log(err);
   });
-  res.json({ title: "dodano nowy produkt" }, body, errors);
+  res.json({ title: "dodano nowy produkt", body }, body, errors);
 });
-// usuwanie po ID - skonczone
-// router.get("/delete/:id", (req, res) => {
-//   Product.findByIdAndDelete(req.params.id, (err) => {
-//     res.json({ title: `usunieto item o id ${req.params.id}` });
-//   });
-// });
+// DELETE Product
+router.delete("/delete/product/:id", (req, res) => {
+  Product.findByIdAndDelete({ _id: req.params.id }, (err) => {
+    if (!err) {
+      res.json({ title: `usunieto produkt o id ${req.params.id}` });
+    } else {
+      res.json(err);
+    }
+  });
+});
 
-// edytowanie
+// EDIT Product
+router.put("/edit/product", (req, res) => {
+  const { id, name, collection, material, room, type, price, filename } =
+    req.body;
+
+  console.log("To dostalem z fronta", req.body);
+  Product.findByIdAndUpdate(
+    {
+      _id: id,
+    },
+    {
+      name: name,
+      furnitureCollection: collection,
+      material: material,
+      room: room,
+      type: type,
+      price: price,
+      filename: filename,
+    },
+    (err) => {
+      if (!err) {
+        res.json({
+          title: `zmieniono parametry:`,
+        });
+      } else {
+        res.json({ title: "blad jest nastepyjacy" });
+      }
+    }
+  );
+});
 
 // ===============================================add parameters========================================
 router.post("/add/collection", (req, res) => {
