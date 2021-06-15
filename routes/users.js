@@ -1,7 +1,8 @@
 var express = require("express");
 var router = express.Router();
+var bcrypt = require("bcrypt");
 var sha512 = require("js-sha512");
-// const bcrypt = require("bcrypt");
+
 // const passport = require("passport");
 // czeba googlac? bcrypt hasdzowanie hasla
 
@@ -64,6 +65,7 @@ router.post("/register", (req, res) => {
           password,
         });
         //Save user
+        newUser.password = sha512(newUser.password);
         newUser
           .save()
           .then((user) => {
@@ -80,6 +82,7 @@ router.post("/register", (req, res) => {
 //popracoweac nad tym??????????????????????????? 1:20min
 router.post("/login", (req, res) => {
   const { email, password } = req.body;
+  const hashpassword = sha512(password);
   // tabela bledow
   let errors = [];
 
@@ -99,7 +102,7 @@ router.post("/login", (req, res) => {
       password: "",
     });
   } else {
-    const user = User.findOne({ email: email, password: password }).then(
+    const user = User.findOne({ email: email, password: hashpassword }).then(
       (user) => {
         if (!user) {
           //User nie exist nie

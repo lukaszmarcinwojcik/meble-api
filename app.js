@@ -7,6 +7,7 @@ var bodyParser = require("body-parser");
 var logger = require("morgan");
 var cors = require("cors");
 var config = require("./config");
+const bcrypt = require("bcrypt");
 var mongoose = require("mongoose");
 
 mongoose.connect(config.db, { useNewUrlParser: true });
@@ -18,6 +19,7 @@ var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var newsletterRouter = require("./routes/newsletter");
 var adminRouter = require("./routes/admin");
+var articleRouter = require("./routes/article");
 
 var app = express();
 
@@ -43,6 +45,7 @@ app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/newsletter", newsletterRouter);
 app.use("/admin", adminRouter);
+app.use("/article", articleRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
