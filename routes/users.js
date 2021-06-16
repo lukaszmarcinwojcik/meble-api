@@ -2,6 +2,8 @@ var express = require("express");
 var router = express.Router();
 var bcrypt = require("bcrypt");
 var sha512 = require("js-sha512");
+// var cookieParser = require("cookie-parser");
+const { createTokens, validateToken } = require("../JWT");
 
 // const passport = require("passport");
 // czeba googlac? bcrypt hasdzowanie hasla
@@ -79,7 +81,7 @@ router.post("/register", (req, res) => {
 });
 
 //====================================login===========================================================
-//popracoweac nad tym??????????????????????????? 1:20min
+
 router.post("/login", (req, res) => {
   const { email, password } = req.body;
   const hashpassword = sha512(password);
@@ -108,17 +110,36 @@ router.post("/login", (req, res) => {
           //User nie exist nie
           errors.push({ message: "bledny login lub haslo" });
           res.json({
+            islogged: false,
+            accessLevel: 0,
+            authenticated: false,
             errors,
             email,
             password: "",
+            message: "Nieudalo sie zalgowac",
           });
         } else {
+          req.session.user = user;
+          // console.log("sesja uzytkownika", req.session.user);
           //tu bedzie res json z danymi uzytkownika
+          ///
+          //tworzenie tokena
+          const accessToken = createTokens(user);
+          console.log("Acces token utwozoony przy zalogowaniu :", accessToken);
+          // res.cookie("access-token", accessToken, {
+          //   maxAge: 60 * 60 * 24 * 30 * 1000,
+          // });
+          //
+          // req.session.user = user;
+          // console.log("sesja uzytkownika", req.session.user);
           accessLevel = user.accessLevel;
           res.json({
             islogged: true,
             message: "Udalo CI sie zalogować!",
             accessLevel,
+            authenticated: true,
+            accessToken: accessToken,
+            user: user,
           });
         }
       }
@@ -128,8 +149,9 @@ router.post("/login", (req, res) => {
 
 //===================================logout===================================================
 router.get("/logout", (req, res) => {
-  req.logout();
+  // req.logout();
 
+  console.log("zostales wylogowany poprawnie");
   res.json({
     message: "Zostales wylogowany",
     islogged: false,

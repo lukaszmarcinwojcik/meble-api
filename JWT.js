@@ -1,0 +1,36 @@
+const { sign, verify } = require("jsonwebtoken");
+
+const createTokens = (user) => {
+  const accessToken = sign(
+    // { username: user.username, id: user.id },
+    { name: user.name, id: user.id, accessLevel: user.accessLevel },
+    "jwtSecret",
+    { expiresIn: 300 }
+  );
+  return accessToken;
+};
+const validateToken = (req, res, next) => {
+  // const accessToken = req.cookies["access-token"];
+  const accessToken = req.headers["x-access-token"];
+  console.log("accessToken w validateToken", accessToken);
+  if (!accessToken) {
+    console.log("Uzytkownik nie posiada autoryzacji");
+    return res.json({
+      message: "Uzytkownik nie posiada autoryzacji",
+      authenticated: false,
+      errors: err,
+    });
+  }
+  try {
+    const validToken = verify(accessToken, "jwtSecret");
+    if (validToken) {
+      console.log("autoryzacja powiodla sie!");
+      // req.authenticated = true;
+      return next();
+    }
+  } catch (err) {
+    console.log("zly token");
+    return res.json({ err: err });
+  }
+};
+module.exports = { createTokens, validateToken };

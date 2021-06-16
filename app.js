@@ -1,10 +1,11 @@
 var createError = require("http-errors");
-var cookieSession = require("cookie-session");
+// var cookieSession = require("cookie-session");
 var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var bodyParser = require("body-parser");
-var logger = require("morgan");
+var session = require("express-session");
+// var logger = require("morgan");
 var cors = require("cors");
 var config = require("./config");
 const bcrypt = require("bcrypt");
@@ -27,19 +28,40 @@ var app = express();
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
 
-app.use(logger("dev"));
+// app.use(logger("dev"));
 app.use(express.json());
-app.use(cors());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
 app.use(
-  cookieSession({
-    name: "session",
-    keys: config.keySession,
-    maxAge: config.maxAgeSession,
+  cors({
+    origin: ["http://localhost:3000"],
+    method: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
   })
 );
+app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(
+  session({
+    key: "userId",
+    secret: "secretsasa",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      expires: 60 * 60 * 24,
+    },
+  })
+);
+//??express urlencoded
+// app.use(express.urlencoded({ extended: false }));
+
+app.use(express.static(path.join(__dirname, "public")));
+//cookiesession ?
+// app.use(
+//   cookieSession({
+//     name: "session",
+//     keys: config.keySession,
+//     maxAge: config.maxAgeSession,
+//   })
+// );
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);

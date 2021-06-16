@@ -6,6 +6,7 @@ const Type = require("../models/type");
 const FurnitureCollection = require("../models/furnitureCollection");
 const Material = require("../models/material");
 const Room = require("../models/room");
+// const bcrypt = require("bcrypt");
 
 /* GET home page. */
 router.get("/", (req, res) => {

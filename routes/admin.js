@@ -4,6 +4,7 @@ const Type = require("../models/type");
 const FurnitureCollection = require("../models/furnitureCollection");
 const Material = require("../models/material");
 const Room = require("../models/room");
+const { createTokens, validateToken } = require("../JWT");
 
 const router = express.Router();
 // // sprawdzenie cookie session
@@ -19,7 +20,7 @@ const router = express.Router();
 
 // ADD PRODUCT
 // /admin/add
-router.post("/add/product", (req, res) => {
+router.post("/add/product", validateToken, (req, res) => {
   //przechwycone dane z formularza w req body
   const body = req.body;
   const productData = new Product(body);
@@ -30,7 +31,7 @@ router.post("/add/product", (req, res) => {
   res.json({ title: "dodano nowy produkt", body }, body, errors);
 });
 // DELETE Product
-router.delete("/delete/product/:id", (req, res) => {
+router.delete("/delete/product/:id", validateToken, (req, res) => {
   Product.findByIdAndDelete({ _id: req.params.id }, (err) => {
     if (!err) {
       res.json({ title: `usunieto produkt o id ${req.params.id}` });
@@ -41,7 +42,7 @@ router.delete("/delete/product/:id", (req, res) => {
 });
 
 // EDIT Product
-router.put("/edit/product", (req, res) => {
+router.put("/edit/product", validateToken, (req, res) => {
   const { id, name, collection, material, room, type, price, filename } =
     req.body;
 
@@ -72,7 +73,7 @@ router.put("/edit/product", (req, res) => {
 });
 
 // ===============================================add parameters========================================
-router.post("/add/collection", (req, res) => {
+router.post("/add/collection", validateToken, (req, res) => {
   const name = req.body.value;
   const furnitureCollectionData = new FurnitureCollection({ name: name });
   const errors = furnitureCollectionData.validateSync();
@@ -86,7 +87,7 @@ router.post("/add/collection", (req, res) => {
   );
 });
 
-router.post("/add/material", (req, res) => {
+router.post("/add/material", validateToken, (req, res) => {
   const name = req.body.value;
   const materialData = new Material({ name: name });
   const errors = materialData.validateSync();
@@ -96,7 +97,7 @@ router.post("/add/material", (req, res) => {
   res.json({ title: "dodano nowy material", name }, materialData, errors);
 });
 
-router.post("/add/room", (req, res) => {
+router.post("/add/room", validateToken, (req, res) => {
   const name = req.body.value;
   const roomData = new Room({ name: name });
   const errors = roomData.validateSync();
@@ -117,7 +118,7 @@ router.post("/add/type", (req, res) => {
 });
 
 // ================================================DELETE parameters==================================
-router.delete("/delete/collection/:id", (req, res) => {
+router.delete("/delete/collection/:id", validateToken, (req, res) => {
   if (req.params.id === "-1") {
     res.json({ message: `wybierz parametr ktory chcesz usunac` });
   } else {
@@ -131,7 +132,7 @@ router.delete("/delete/collection/:id", (req, res) => {
   }
 });
 
-router.delete("/delete/material/:id", (req, res) => {
+router.delete("/delete/material/:id", validateToken, (req, res) => {
   if (req.params.id === "-1") {
     res.json({ message: `wybierz parametr ktory chcesz usunac` });
   } else {
@@ -145,7 +146,7 @@ router.delete("/delete/material/:id", (req, res) => {
   }
 });
 
-router.delete("/delete/product/:id", (req, res) => {
+router.delete("/delete/product/:id", validateToken, (req, res) => {
   if (req.params.id === "-1") {
     res.json({ message: `wybierz parametr ktory chcesz usunac` });
   } else {
@@ -158,7 +159,7 @@ router.delete("/delete/product/:id", (req, res) => {
     });
   }
 });
-router.delete("/delete/room/:id", (req, res) => {
+router.delete("/delete/room/:id", validateToken, (req, res) => {
   if (req.params.id === "-1") {
     res.json({ message: `wybierz parametr ktory chcesz usunac` });
   } else {
@@ -172,7 +173,7 @@ router.delete("/delete/room/:id", (req, res) => {
   }
 });
 
-router.delete("/delete/type/:id", (req, res) => {
+router.delete("/delete/type/:id", validateToken, (req, res) => {
   if (req.params.id === "-1") {
     res.json({ message: `wybierz parametr ktory chcesz usunac` });
   } else {
@@ -187,7 +188,7 @@ router.delete("/delete/type/:id", (req, res) => {
 });
 //=================================================EDIT PARAMETER==========================
 
-router.put("/edit/collection", (req, res) => {
+router.put("/edit/collection", validateToken, (req, res) => {
   FurnitureCollection.findByIdAndUpdate(
     { _id: req.body.id },
     { name: req.body.newName },
@@ -202,7 +203,7 @@ router.put("/edit/collection", (req, res) => {
     }
   );
 });
-router.get("/edit/material", (req, res) => {
+router.get("/edit/material", validateToken, (req, res) => {
   Material.findByIdAndUpdate(
     { _id: req.body.id },
     { name: req.body.newName },
@@ -217,7 +218,7 @@ router.get("/edit/material", (req, res) => {
     }
   );
 });
-router.get("/edit/room", (req, res) => {
+router.get("/edit/room", validateToken, (req, res) => {
   Room.findByIdAndUpdate(
     { _id: req.body.id },
     { name: req.body.newName },
@@ -232,7 +233,7 @@ router.get("/edit/room", (req, res) => {
     }
   );
 });
-router.get("/edit/type", (req, res) => {
+router.get("/edit/type", validateToken, (req, res) => {
   Type.findByIdAndUpdate(
     { _id: req.body.id },
     { name: req.body.newName },
