@@ -1,3 +1,5 @@
+var config = require("./config");
+
 const { sign, verify } = require("jsonwebtoken");
 
 const createTokens = (user) => {
