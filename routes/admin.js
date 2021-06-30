@@ -7,30 +7,15 @@ const Room = require("../models/room");
 const { createTokens, validateToken } = require("../JWT");
 
 const router = express.Router();
-// // sprawdzenie cookie session
-// router.all("*", (req, res, next) => {
-//   // przed akzda funkcja w adminie sprawadza czy sesja jest
-//   //zeby random nie mogl cos pozmienaic
-//   console.log("sesja ciastkowa w router all", req.session.admin);
-//   if (!req.session.admin) {
-//     res.json({ title: "nie masz dostepu" });
-//   }
-//   next();
-// });
 
-// ADD PRODUCT
-// /admin/add
 router.post("/add/product", validateToken, (req, res) => {
-  //przechwycone dane z formularza w req body
   const body = req.body;
   const productData = new Product(body);
   const errors = productData.validateSync();
-  productData.save((err) => {
-    console.log(err);
-  });
+  productData.save((err) => {});
   res.json({ title: "dodano nowy produkt", body }, body, errors);
 });
-// DELETE Product
+
 router.delete("/delete/product/:id", validateToken, (req, res) => {
   Product.findByIdAndDelete({ _id: req.params.id }, (err) => {
     if (!err) {
@@ -41,12 +26,10 @@ router.delete("/delete/product/:id", validateToken, (req, res) => {
   });
 });
 
-// EDIT Product
 router.put("/edit/product", validateToken, (req, res) => {
   const { id, name, collection, material, room, type, price, filename } =
     req.body;
 
-  console.log("To dostalem z fronta", req.body);
   Product.findByIdAndUpdate(
     {
       _id: id,
@@ -66,13 +49,12 @@ router.put("/edit/product", validateToken, (req, res) => {
           title: `zmieniono parametry:`,
         });
       } else {
-        res.json({ title: "blad jest nastepyjacy" });
+        res.json({ error: err });
       }
     }
   );
 });
-
-// ===============================================add parameters========================================
+// ================================================ADD parameters==================================
 router.post("/add/collection", validateToken, (req, res) => {
   const name = req.body.value;
   const furnitureCollectionData = new FurnitureCollection({ name: name });

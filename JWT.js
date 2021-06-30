@@ -2,7 +2,6 @@ const { sign, verify } = require("jsonwebtoken");
 
 const createTokens = (user) => {
   const accessToken = sign(
-    // { username: user.username, id: user.id },
     { name: user.name, id: user.id, accessLevel: user.accessLevel },
     "jwtSecret",
     { expiresIn: 300 }
@@ -30,7 +29,7 @@ const validateToken = (req, res, next) => {
     }
   } catch (err) {
     console.log("zly token");
-    return res.json({ err: err });
+    return res.json({ error: "nie posiadasz uprawnień!" });
   }
 };
 module.exports = { createTokens, validateToken };

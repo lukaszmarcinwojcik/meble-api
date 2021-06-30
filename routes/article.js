@@ -4,13 +4,6 @@ var router = express.Router();
 const Article = require("../models/articel");
 const Comment = require("../models/comment");
 
-// pobieranie wszystkich artykulow
-//get all article
-// router.get("/", (req, res) => {
-//   Article.find({}, (err, articleList) => {
-//     res.json(articleList);
-//   });
-// });
 router.get("/", (req, res) => {
   Article.find()
     .populate("comment")
@@ -20,7 +13,6 @@ router.get("/", (req, res) => {
 });
 
 router.post("/add", (req, res) => {
-  //przechwycone dane z formularza w req body
   const body = req.body;
 
   const articleData = new Article(body);
@@ -31,17 +23,13 @@ router.post("/add", (req, res) => {
   res.json({ title: "dodano nowy artykul", body }, body, errors);
 });
 
-// pobieranie wszystkich komentarzy
-//get all comment
 router.get("/comment", (req, res) => {
   Comment.find({}, (err, commentList) => {
     res.json(commentList);
   });
 });
 
-//add comment
 router.post("/comment/add", (req, res) => {
-  //przechwycone dane z formularza w req body
   const body = req.body;
   console.log(req.body);
 
@@ -53,9 +41,6 @@ router.post("/comment/add", (req, res) => {
   res.json({ title: "dodano nowy komentarz", body }, body, errors);
 });
 
-//////////////////////////////////////////////////
-// @desc Get all events
-// @route GET /api/events
 router.get("/", async (req, res) => {
   try {
     const events = await Event.find();
@@ -66,8 +51,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-// @desc Create event
-// @route POST /api/events
 router.post("/", async (req, res) => {
   try {
     const event = await Event.create(req.body);

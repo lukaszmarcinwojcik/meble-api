@@ -6,16 +6,14 @@ const Type = require("../models/type");
 const FurnitureCollection = require("../models/furnitureCollection");
 const Material = require("../models/material");
 const Room = require("../models/room");
-// const bcrypt = require("bcrypt");
 
-/* GET home page. */
 router.get("/", (req, res) => {
   res.json({ title: "strona glowna" });
 });
-// LOGOWANIE ADMINISTRATORA
+
 router.post("/login", (req, res) => {
   const body = req.body;
-  console.log("param wyslany to", req.body);
+
   if (body.login === config.login && body.password === config.password) {
     req.session.admin = 1;
     res.json({
@@ -31,7 +29,7 @@ router.post("/login", (req, res) => {
     });
   }
 });
-//WYLOGOWANIE
+
 router.get("/logout", (req, res) => {
   req.session.admin = null;
   res.json({
@@ -41,42 +39,36 @@ router.get("/logout", (req, res) => {
   });
 });
 
-//POBIERANIE WSZYSTKICH PRODUKTOW
 router.get("/productList", (req, res) => {
   Product.find({}, (err, productList) => {
     res.json(productList);
   });
 });
 
-//POBIERANIE WSZYSTKICH KOLEKCJI
 router.get("/collectionList", (req, res) => {
   FurnitureCollection.find({}, (err, collectionList) => {
     res.json(collectionList);
   });
 });
 
-//POBIERANIE WSZYSTKICH MATERIALOW
 router.get("/materialList", (req, res) => {
   Material.find({}, (err, materialList) => {
     res.json(materialList);
   });
 });
 
-//POBIERANIE WSZYSTKICH POMIESZCZEN
 router.get("/roomList", (req, res) => {
   Room.find({}, (err, roomList) => {
     res.json(roomList);
   });
 });
 
-//POBIERANIE WSZYSTKICH RODZAJOW
 router.get("/typeList", (req, res) => {
   Type.find({}, (err, typeList) => {
     res.json(typeList);
   });
 });
 
-//FILTROWANIE MEBLI
 router.get("/filter", (req, res) => {
   const type = req.query.type;
   const furnitureCollection = req.query.collection;

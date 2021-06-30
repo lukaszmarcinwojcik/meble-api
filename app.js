@@ -1,11 +1,9 @@
 var createError = require("http-errors");
-// var cookieSession = require("cookie-session");
 var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var bodyParser = require("body-parser");
 var session = require("express-session");
-// var logger = require("morgan");
 var cors = require("cors");
 var config = require("./config");
 const bcrypt = require("bcrypt");
@@ -50,18 +48,8 @@ app.use(
     },
   })
 );
-//??express urlencoded
-// app.use(express.urlencoded({ extended: false }));
 
 app.use(express.static(path.join(__dirname, "public")));
-//cookiesession ?
-// app.use(
-//   cookieSession({
-//     name: "session",
-//     keys: config.keySession,
-//     maxAge: config.maxAgeSession,
-//   })
-// );
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
