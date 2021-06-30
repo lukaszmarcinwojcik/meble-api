@@ -10,6 +10,9 @@ const Room = require("../models/room");
 router.get("/", (req, res) => {
   res.json({ title: "strona glowna" });
 });
+router.get("/Dziala", (req, res) => {
+  res.json({ title: "Dziala", body: "ale slabo" });
+});
 
 router.post("/login", (req, res) => {
   const body = req.body;

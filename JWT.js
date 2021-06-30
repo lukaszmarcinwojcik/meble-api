@@ -5,7 +5,7 @@ const { sign, verify } = require("jsonwebtoken");
 const createTokens = (user) => {
   const accessToken = sign(
     { name: user.name, id: user.id, accessLevel: user.accessLevel },
-    "jwtSecret",
+    config.JWT_SECRET,
     { expiresIn: 300 }
   );
   return accessToken;
@@ -23,7 +23,7 @@ const validateToken = (req, res, next) => {
     });
   }
   try {
-    const validToken = verify(accessToken, "jwtSecret");
+    const validToken = verify(accessToken, config.JWT_SECRET);
     if (validToken) {
       console.log("autoryzacja powiodla sie!");
       // req.authenticated = true;
