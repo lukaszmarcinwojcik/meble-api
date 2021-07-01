@@ -30,7 +30,7 @@ app.set("view engine", "jade");
 app.use(express.json());
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
+    origin: ["https://meble-klasyczne.herokuapp.com/"],
     method: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
