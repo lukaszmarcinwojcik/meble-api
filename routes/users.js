@@ -28,6 +28,7 @@ router.post("/register", (req, res) => {
   if (password.length < 6) {
     errors.push({ message: "Haslo musi zawierac conajmniej 6 znaków" });
   }
+
   if (errors.length > 0) {
     res.json({
       errors,
@@ -93,7 +94,7 @@ router.post("/login", (req, res) => {
     const user = User.findOne({ email: email, password: hashpassword }).then(
       (user) => {
         if (!user) {
-          errors.push({ message: "bledny login lub haslo" });
+          errors.push({ message: "błędny login lub hasło" });
           res.json({
             islogged: null,
             accessLevel: 0,
@@ -101,7 +102,7 @@ router.post("/login", (req, res) => {
             errors,
             email,
             password: "",
-            message: "Nieudalo sie zalgowac",
+            message: "Nie udało sie zalogować",
           });
         } else {
           req.session.user = user;
@@ -125,9 +126,8 @@ router.post("/login", (req, res) => {
 });
 
 //===================================logout===================================================
-router.get("/logout", (req, res) => {
-  // req.logout();
 
+router.get("/logout", (req, res) => {
   res.json({
     message: "Zostales wylogowany",
     islogged: false,

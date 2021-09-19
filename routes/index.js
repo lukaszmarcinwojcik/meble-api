@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const config = require("../config");
+
 const Product = require("../models/product");
 const Type = require("../models/type");
 const FurnitureCollection = require("../models/furnitureCollection");
@@ -86,9 +87,7 @@ router.get("/filter", (req, res) => {
   ) {
     res.redirect("/productList");
   }
-
   let Out = Product;
-
   if (type) {
     Out = Out.find({
       type: type,

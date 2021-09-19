@@ -12,7 +12,7 @@ router.post("/add/product", validateToken, (req, res) => {
   const body = req.body;
   const productData = new Product(body);
   const errors = productData.validateSync();
-  productData.save((err) => {});
+  productData.save((err) => { });
   res.json({ title: "dodano nowy produkt", body }, body, errors);
 });
 
@@ -46,13 +46,14 @@ router.put("/edit/product", validateToken, (req, res) => {
     (err) => {
       if (!err) {
         res.json({
-          title: `zmieniono parametry:`,
+          title: `dane zostały zaktualizowane:`,
         });
       } else {
         res.json({ error: err });
       }
     }
   );
+
 });
 // ================================================ADD parameters==================================
 router.post("/add/collection", validateToken, (req, res) => {
